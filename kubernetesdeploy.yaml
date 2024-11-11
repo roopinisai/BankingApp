@@ -1,37 +1,36 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: bankapp-eta-deploy
+  name: bankingapp-deploy
   labels:
-    app: bankapp-eta-app
+    app: bankingapp-lb
 spec:
-  replicas: 3
+  replicas: 3  # You can adjust this based on your scaling requirements
   selector:
     matchLabels:
-      app: bankapp-eta-app
+      app: bankingapp
   template:
     metadata:
       labels:
-        app: bankapp-eta-app
+        app: bankingapp
     spec:
       containers:
-      - name: bankapp-eta-container
-        image: roopinisai/mybankingimg:3
+      - name: bankingapp-container
+        image: roopinisai/projectpractice600:latest  # Replace with your image name if different
         ports:
-        - containerPort: 8080
+        - containerPort: 8082  # Changed to 8082 as per your application
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: bankapp-eta-np-service
+  name: bankingapp-np-service
   labels:
-    app: bankapp-eta-app
+    app: bankingapp
 spec:
   selector:
-    app: bankapp-eta-app
-
-  type: NodePort
+    app: bankingapp  # Matches the label from the Deployment
+  type: NodePort  # NodePort service type exposes the application on a port on each Node
   ports:
-  - nodePort: 31032    
-    port: 8080
-    targetPort: 8080
+  - port: 8082        # External port (on the service)
+    targetPort: 8082   # Container port where your app is listening
+    nodePort: 30000    # Optional, specify a nodePort if you want to expose a static port on the node, else Kubernetes will auto-assign one.
