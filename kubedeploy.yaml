@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: loksai-eta-container
-        image: roopinisai/projectpractice600:latest
+        image: roopinisai/kubebankapp:latest
         ports:
         - containerPort: 8082
 ---
